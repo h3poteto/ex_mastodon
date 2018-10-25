@@ -26,7 +26,7 @@ defmodule ExMastodon.REST.API do
 
   def post(%ExMastodon.REST.API.Client{url: url, access_token: access_token}, path, body \\ %{}) do
     headers = ["Authorization": "Bearer #{access_token}", "Accept": "Application/json; Charset=utf-8"]
-    {:ok, response} = HTTPoison.post("#{url}#{path}", body, headers)
+    {:ok, response} = HTTPoison.post("#{url}#{path}", Poison.encode!(body), headers)
     {:ok, json} = response.body
     |> Poison.decode
     {:ok, json, response.headers}
@@ -34,7 +34,7 @@ defmodule ExMastodon.REST.API do
 
   def patch(%ExMastodon.REST.API.Client{url: url, access_token: access_token}, path, body \\ %{}) do
     headers = ["Authorization": "Bearer #{access_token}", "Accept": "Application/json; Charset=utf-8"]
-    {:ok, response} = HTTPoison.patch("#{url}#{path}", body, headers)
+    {:ok, response} = HTTPoison.patch("#{url}#{path}", Poison.encode!(body), headers)
     {:ok, json} = response.body
     |> Poison.decode
     {:ok, json, response.headers}

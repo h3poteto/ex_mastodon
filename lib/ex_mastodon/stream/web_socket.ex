@@ -16,8 +16,9 @@ defmodule ExMastodon.Stream.WebSocket do
   end
 
   @doc false
-  def handle_frame(frame, %{bot_handler: bot_handler} = state) do
-    bot_handler.handle_frame(frame, state)
+  def handle_frame({type, msg} = _frame, %{bot_handler: bot_handler} = state) do
+    %{"event" => event, "payload" => payload} = Poison.decode!(msg)
+    bot_handler.handle_frame(type, event, Poison.decode!(payload), state)
   end
 
   @doc false
